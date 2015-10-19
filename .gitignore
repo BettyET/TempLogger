@@ -1,15 +1,11 @@
 *.cwGeneratedFileSetLog
 *.g_c
 *.g_x
-RemoteControl/Documentation
-RemoteControl/Generated_Code
-RemoteControl/Debug
+Documentation
+Generated_Code
+Debug
 
-Sumo/Documentation
-Sumo/Generated_Code
-Sumo/Debug
 
 ProjectInfo.xml
-RemoteControl/.settings
-Sumo/.settings
+.settings
 
