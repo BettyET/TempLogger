@@ -12,6 +12,7 @@
 #include "CLS1.h"
 #include "Key.h"
 #include "lookup.h"
+#include "Timer.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +37,7 @@ void APP_run(void) {
 		send = Key_GetVal();
 		if(send==FALSE){
 			LED1_On();
-			WAIT1_Waitms(200);
+			//WAIT1_Waitms(200);
 			(void)AD1_Measure(TRUE);				// do the conversion, wait until done
 			(void)AD1_GetChanValue16(0,&value[0]);	// save the value
 			(void)AD1_GetChanValue16(1,&value[1]);
@@ -46,7 +47,7 @@ void APP_run(void) {
 			temp1= getTemp(((uint16_t)(value[1]/64)-ref));
 			temp2= getTemp(((uint16_t)(value[2]/64)-ref));
 			char str[100];
-			sprintf(str, "Teperatur: %.2f \t %.2f \n", temp1, temp2);
+			sprintf(str, "%d \t %.2f \t %.2f \n",TMR_GetValue(), temp1, temp2);
 			CLS1_SendStr(str, ioLocal->stdOut);
 			LED1_Off();
 		}
