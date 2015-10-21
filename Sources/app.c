@@ -21,6 +21,7 @@
 static uint16_t value[AD1_CHANNEL_COUNT]; 					// save ad- value
 
 uint8_t voltage_mv = 0;
+int time = 0;
 float temp1 = 0.0f;
 float temp2 = 0.0f;
 float ref = 0.0f;
@@ -39,6 +40,7 @@ void APP_run(void) {
 			LED1_On();
 			//WAIT1_Waitms(200);
 			(void)AD1_Measure(TRUE);				// do the conversion, wait until done
+			time=TMR_GetValue();					// aktuelle Zeit
 			(void)AD1_GetChanValue16(0,&value[0]);	// save the value
 			(void)AD1_GetChanValue16(1,&value[1]);
 			(void)AD1_GetChanValue16(2,&value[2]);
@@ -47,7 +49,7 @@ void APP_run(void) {
 			temp1= getTemp(((uint16_t)(value[1]/64)-ref));
 			temp2= getTemp(((uint16_t)(value[2]/64)-ref));
 			char str[100];
-			sprintf(str, "%d \t %.2f \t %.2f \n",TMR_GetValue(), temp1, temp2);
+			sprintf(str, "%d \t %.2f \t %.2f \n",time, temp1, temp2);
 			CLS1_SendStr(str, ioLocal->stdOut);
 			LED1_Off();
 		}

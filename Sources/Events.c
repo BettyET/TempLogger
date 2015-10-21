@@ -28,11 +28,11 @@
 
 #include "Cpu.h"
 #include "Events.h"
+#include "Timer.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif 
-
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
 

@@ -8,11 +8,11 @@
 
 
 #include "Timer.h"
+#include "Events.h"
 
 static unsigned int cntr = 0;
 
 void TMR_OnInterrupt(void) {
-
   if (cntr<4294967296){
 	  cntr++;
   }
