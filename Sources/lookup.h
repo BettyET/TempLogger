@@ -10,7 +10,7 @@
 
 #include "PE_Types.h"
 
-float getTemp(uint16_t adc_value);
+uint16_t getTemp(uint16_t adc_value);
 
 #define TABLE_SIZE 1024
 
