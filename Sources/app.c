@@ -14,12 +14,12 @@
 #include "lookup.h"
 #include "Timer.h"
 #include "TI1.h"
-
+#include "USB1.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define TEMP_STORAGE  1
+#define TEMP_STORAGE  1000
 
 static uint16_t value[AD1_CHANNEL_COUNT]; 					// save ad- value
 
@@ -32,6 +32,8 @@ uint16_t ref = 0.0f;
 bool send = TRUE;
 
 
+static uint8_t cdc_buffer[USB1_DATA_BUFF_SIZE];
+static uint8_t in_buffer[USB1_DATA_BUFF_SIZE];
 
 void APP_run(void) {
 	AS1_Init();
@@ -60,20 +62,18 @@ void APP_run(void) {
 			LED1_Off();
 			int i;
 			for(i=0; i<ctr; i++){
-				//char str[30];
-				//sprintf(str, "%d \t %d \t %d \n",time[i], temp1[i], temp2[i]);
+				(void)CDC1_App_Task(cdc_buffer, sizeof(cdc_buffer));
+				char str[30];
+				sprintf(str, "%d \t %d \t %d \r\n",time[i], temp1[i], temp2[i]);
 				//CLS1_SendStr(str, ioLocal->stdOut);
-				CLS1_SendNum16u(time[i], ioLocal->stdOut);CLS1_SendChar('\t');
-				CLS1_SendNum16u(temp1[i], ioLocal->stdOut);CLS1_SendChar('\t');
-				CLS1_SendNum16u(temp2[i], ioLocal->stdOut);CLS1_SendChar('\t');
-				CLS1_SendChar('\n');
+
+				(void)CDC1_SendString((unsigned char*)str);
+
 			}
 
 		}
 
 	}
 }
-
-
 
 
