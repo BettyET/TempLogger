@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TEMP_STORAGE  1000
+#define TEMP_STORAGE  1
 
 uint8_t voltage_mv = 0;
 int ctr;
@@ -58,7 +58,7 @@ static void MainTask(void *pvParameters) {
 				ref = value[0] / 64;										// Referenzspannung
 				temp1[ctr] = getTemp(((uint16_t) (value[1] / 64) - ref));
 				temp2[ctr] = getTemp(((uint16_t) (value[2] / 64) - ref));
-				FRTOS1_vTaskDelayUntil(&xLastWakeTime, 50/portTICK_RATE_MS);// 50ms warten
+
 			}
 			LED1_Off();
 			int i;
@@ -70,7 +70,7 @@ static void MainTask(void *pvParameters) {
 				//CLS1_SendStr(str, ioLocal->stdOut);
 
 				(void) CDC1_SendString((unsigned char*) str);
-
+				FRTOS1_vTaskDelayUntil(&xLastWakeTime, 20/portTICK_RATE_MS);// 50ms warten
 			}
 
 		}
