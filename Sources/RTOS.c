@@ -47,16 +47,17 @@ static uint8_t in_buffer[USB1_DATA_BUFF_SIZE];
 
 static void MainTask(void *pvParameters) {
 	(void) pvParameters;
-	TickType_t xLastWakeTime;
 	AD1_Calibrate(TRUE);
-	while (1) {
+	TickType_t xLastWakeTime;
+	xLastWakeTime = xTaskGetTickCount(); 					// Aktueller Tick wird gespeichert
+	for (;;) {
 		send = Key_GetVal();
 		if (send == FALSE) {
 			LED1_On();
+
 			for (ctr = 0; ctr < TEMP_STORAGE; ctr++) {
-				xLastWakeTime = xTaskGetTickCount(); // Aktueller Tick wird gespeichert
-				time[ctr] = xLastWakeTime;					// Zeit abspeichern
-				(void) AD1_Measure(TRUE);// do the conversion, wait until done
+				time[ctr]= xTaskGetTickCount();
+				(void) AD1_Measure(TRUE);					// do the conversion, wait until done
 				(void) AD1_GetChanValue16(0, &value[0]);	// save the value
 				(void) AD1_GetChanValue16(1, &value[1]);
 				(void) AD1_GetChanValue16(2, &value[2]);
@@ -69,7 +70,7 @@ static void MainTask(void *pvParameters) {
 				(void) AD1_GetChanValue16(9, &value[9]);
 				//voltage_mv = (uint8_t)(value[0]-value[1])*3300/65536;
 				ref = value[0] / 64;						// Referenzspannung
-				temp1[ctr] = getTemp(((uint16_t) (value[1] / 64) - ref));
+				temp1[ctr] = getTemp(((uint16_t) ((value[1]+12710) / 64) - ref));
 				temp2[ctr] = getTemp(((uint16_t) (value[2] / 64) - ref));
 				temp3[ctr] = getTemp(((uint16_t) (value[3] / 64) - ref));
 				temp4[ctr] = getTemp(((uint16_t) (value[4] / 64) - ref));
@@ -77,24 +78,23 @@ static void MainTask(void *pvParameters) {
 				temp6[ctr] = getTemp(((uint16_t) (value[6] / 64) - ref));
 				temp7[ctr] = getTemp(((uint16_t) (value[7] / 64) - ref));
 				temp8[ctr] = getTemp(((uint16_t) (value[8] / 64) - ref));
-				temp9[ctr] = getTemp(((uint16_t) (value[9] / 64) - ref));
+				temp9[ctr] = getTemp(((uint16_t) ((value[9]+3555) / 64) - ref));
 
 			}
 			LED1_Off();
 			int i;
 			for (i = 0; i < ctr; i++) {
 				(void) CDC1_App_Task(cdc_buffer, sizeof(cdc_buffer));
-				char str[30];
+				char str[200];
 				sprintf(str,
 						"%d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d\r\n",
 						time[i], temp1[i], temp2[i], temp3[i], temp4[i],
 						temp5[i], temp6[i], temp7[i], temp8[i], temp9[i]);
 				(void) CDC1_SendString((unsigned char*) str);
-				FRTOS1_vTaskDelayUntil(&xLastWakeTime, 20/portTICK_RATE_MS);// 50ms warten
 			}
 
 		}
-
+		FRTOS1_vTaskDelayUntil(&xLastWakeTime, 50/portTICK_RATE_MS);	// 50ms warten
 	}
 }
 
