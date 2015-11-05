@@ -69,16 +69,26 @@ static void MainTask(void *pvParameters) {
 				(void) AD1_GetChanValue16(8, &value[8]);
 				(void) AD1_GetChanValue16(9, &value[9]);
 				//voltage_mv = (uint8_t)(value[0]-value[1])*3300/65536;
-				ref = value[0] / 64;						// Referenzspannung
-				temp1[ctr] = getTemp(((uint16_t) ((value[1]+12710) / 64) - ref));
-				temp2[ctr] = getTemp(((uint16_t) (value[2] / 64) - ref));
-				temp3[ctr] = getTemp(((uint16_t) (value[3] / 64) - ref));
-				temp4[ctr] = getTemp(((uint16_t) (value[4] / 64) - ref));
-				temp5[ctr] = getTemp(((uint16_t) (value[5] / 64) - ref));
-				temp6[ctr] = getTemp(((uint16_t) (value[6] / 64) - ref));
-				temp7[ctr] = getTemp(((uint16_t) (value[7] / 64) - ref));
-				temp8[ctr] = getTemp(((uint16_t) (value[8] / 64) - ref));
-				temp9[ctr] = getTemp(((uint16_t) ((value[9]+3555) / 64) - ref));
+//				ref = value[0] / 64;						// Referenzspannung
+//				temp1[ctr] = getTemp(((uint16_t) ((value[1]+12710) / 64) - ref));
+//				temp2[ctr] = getTemp(((uint16_t) (value[2] / 64) - ref));
+//				temp3[ctr] = getTemp(((uint16_t) (value[3] / 64) - ref));
+//				temp4[ctr] = getTemp(((uint16_t) (value[4] / 64) - ref));
+//				temp5[ctr] = getTemp(((uint16_t) (value[5] / 64) - ref));
+//				temp6[ctr] = getTemp(((uint16_t) (value[6] / 64) - ref));
+//				temp7[ctr] = getTemp(((uint16_t) (value[7] / 64) - ref));
+//				temp8[ctr] = getTemp(((uint16_t) (value[8] / 64) - ref));
+//				temp9[ctr] = getTemp(((uint16_t) ((value[9]) / 64) - ref));
+				ref = value[0];
+				temp1[ctr] = value[1]- ref;
+				temp2[ctr] = value[2]- ref;
+				temp3[ctr] = value[3]- ref;
+				temp4[ctr] = value[4]- ref;
+				temp5[ctr] = value[5]- ref;
+				temp6[ctr] = value[6]- ref;
+				temp7[ctr] = value[7]- ref;
+				temp8[ctr] = value[8]- ref;
+				temp9[ctr] = value[9]- ref;
 
 			}
 			LED1_Off();
