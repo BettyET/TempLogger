@@ -53,7 +53,7 @@ static void MainTask(void *pvParameters) {
 	for (;;) {
 		send = Key_GetVal();
 		if (send == FALSE) {
-			LED1_On();
+			//LED1_On();
 
 			for (ctr = 0; ctr < TEMP_STORAGE; ctr++) {
 				time[ctr]= xTaskGetTickCount();
@@ -91,15 +91,14 @@ static void MainTask(void *pvParameters) {
 				temp9[ctr] = value[9]- ref;
 
 			}
-			LED1_Off();
+			//LED1_Off();
 			int i;
 			for (i = 0; i < ctr; i++) {
 				(void) CDC1_App_Task(cdc_buffer, sizeof(cdc_buffer));
 				char str[200];
 				sprintf(str,
-						"%d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d\r\n",
-						time[i], temp1[i], temp2[i], temp3[i], temp4[i],
-						temp5[i], temp6[i], temp7[i], temp8[i], temp9[i]);
+						"%d \t %d \t %d \t %d \r\n",
+						temp2[i], temp3[i], temp8[i], temp9[i]);
 				(void) CDC1_SendString((unsigned char*) str);
 			}
 
